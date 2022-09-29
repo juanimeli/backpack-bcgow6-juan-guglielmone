@@ -31,7 +31,7 @@ type salaryError struct {
 }
 
 func (err *salaryError) Error() string {
-	return fmt.Sprintf("%v", err.msg)
+	return err.msg
 }
 
 func salaryErrorTest(salary int) (res string, err error) {
@@ -62,7 +62,7 @@ func salaryErrorTest3(salary int) (res string, err error) {
 }
 func main() {
 
-	salary := 200_000
+	salary := 100_000
 
 	result, err := salaryErrorTest(salary)
 

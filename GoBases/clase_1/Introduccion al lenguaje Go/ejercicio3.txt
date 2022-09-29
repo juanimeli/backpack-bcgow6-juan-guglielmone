@@ -1,7 +1,0 @@
-  var 1nombre string ----------------> Mal. no debe empezar con numero
-  var apellido string -------------> Correcto
-  var int edad --------------------> Mal. Distinto orden. var edad int
-  1apellido := 6 ------------------> Mal. no debe empezar con numero
-  var licencia_de_conducir = true -> Correcto. Revisar el estilo
-  var estatura de la persona int --> No debe de contener espacios
-  cantidadDeHijos := 2 ------------> Correcto
