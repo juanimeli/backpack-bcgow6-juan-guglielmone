@@ -26,21 +26,21 @@ type User struct {
 	Contraseña string
 }
 
-func (u User) changeName(newName, newSurName string) {
-	p1 := &u
-	p1.Name = newName
-	p1.Apellido = newSurName
+func (u *User) changeName(newName, newSurName *string) {
+
+	u.Name = *newName
+	u.Apellido = *newSurName
 }
 
-func (u User) changeAge(newAge int) {
-	p1 := &u
-	p1.Edad = newAge
+func (u *User) changeAge(newAge *int) {
+
+	u.Edad = *newAge
 }
-func (u User) changeEmail(newEmail string) {
-	u.Correo = newEmail
+func (u *User) changeEmail(newEmail *string) {
+	u.Correo = *newEmail
 }
-func (u User) changePassword(newPass string) {
-	u.Contraseña = newPass
+func (u *User) changePassword(newPass *string) {
+	u.Contraseña = *newPass
 }
 
 func main() {
@@ -55,8 +55,12 @@ func main() {
 	fmt.Println(u1.Name)
 	fmt.Println(u1.Apellido)
 
-	u1.changeAge(20)
-	u1.changeName("Juan", "Pedetti")
+	newName := "Juan"
+	newSurname := "Pedetti"
+	newAge := 20
+
+	u1.changeAge(&newAge)
+	u1.changeName(&newName, &newSurname)
 
 	fmt.Println(u1.Edad)
 	fmt.Println(u1.Name)
