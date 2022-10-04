@@ -77,20 +77,9 @@ Se debe implementar el router para los diferentes endpoints
 */
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"os"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
-	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/handler"
-	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/internal/transactions"
-)
-
-const (
-	filePath = "./transactions.json"
-	Token    = "12345"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/cmd/server/handler"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/internal/transactions"
 )
 
 func main() {
@@ -98,7 +87,7 @@ func main() {
 	//fmt.Println(ReadJson(filePath))
 
 	repo := transactions.NewRepository()
-	service := transactions.NewService()
+	service := transactions.NewService(repo)
 
 	t := handler.NewTransaction(service)
 
@@ -109,7 +98,7 @@ func main() {
 			"message": "Hola Juani!",
 		})
 	})
-	*/
+
 
 	transactionsaux, err := ReadJson(filePath)
 	if err != nil {
@@ -117,50 +106,22 @@ func main() {
 		os.Exit(1)
 	}
 	transactions = transactionsaux
+	*/
 
 	transactionsR := router.Group("/transactions")
 	{
-		transactionsR.GET("", GetAll)
-		transactionsR.GET("?Moneda=USD", FilterTransactions)
-		transactionsR.GET("/:ID", FindTransaction)
-		transactionsR.POST("/", AddTransaction())
+		transactionsR.GET("/", t.GetAll())
+		transactionsR.POST("/", t.AddTransaction())
+		//transactionsR.GET("?Moneda=USD", FilterTransactions)
+		//transactionsR.GET("/:ID", FindTransaction)
 	}
 
 	router.Run()
 
 }
 
-func AddTransaction() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		token := ctx.GetHeader("token")
-		if token != Token {
-			ctx.JSON(401, gin.H{"error": "invalid token"})
-			return
-		}
-
-		var t Transaction
-		if err := ctx.ShouldBindJSON(&r); err != nil {
-			ctx.JSON(404, gin.H{"error": fmt.Errorf("field %s is required", err.Error())})
-			return
-		}
-
-		ctx.JSON(200, gin.H{"transaction added": r})
-	}
-
-}
-
-func GetAll(ctx *gin.Context) {
-
-	/*transactions, err := ReadJson(filePath)
-	if err != nil {
-		ctx.JSON(400, err.Error())
-		return
-	}*/
-	ctx.JSON(200, gin.H{"content": transactions})
-
-}
-
-func FindTransaction(ctx *gin.Context) {
+/*
+	func FindTransaction(ctx *gin.Context) {
 
 	transactions, err := ReadJson(filePath)
 	if err != nil {
@@ -213,3 +174,4 @@ func ReadJson(filePath string) ([]Request, error) {
 	return transactions, nil
 
 }
+*/

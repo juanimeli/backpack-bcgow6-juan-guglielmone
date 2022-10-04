@@ -1,4 +1,4 @@
-module github.com/juanimeli/backpack-bcgow6-juan-guglielmone
+module github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb
 
 go 1.19
 
