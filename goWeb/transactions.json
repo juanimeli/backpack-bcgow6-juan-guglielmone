@@ -1,0 +1,27 @@
+[  
+    {"ID": 1,
+    "cod": "AR45JA3",
+    "currency": "USD",
+    "amount": 56.99,
+    "sender": "Juan",
+    "receiver": "Martin",
+    "date": "2022-10-05T12:28:18.836"},
+    
+    {"ID": 2,
+    "cod": "AR45JA3",
+    "currency": "UYU",
+    "amount": 5697.99,
+    "sender": "Juan",
+    "receiver": "Martin",
+    "date": "2022-10-05T12:28:18.836"},
+
+    {"ID": 3,
+    "cod": "AR45JA3",
+    "currency": "USD",
+    "amount": 58676.99,
+    "sender": "Juan",
+    "receiver": "Martin",
+    "date": "2022-10-05T12:28:18.836"}
+]
+
+
