@@ -62,6 +62,18 @@ deben seguir los siguientes pasos::
 3. En caso que el token enviado no sea correcto debemos retornar un error 401 y un
 mensaje que “no tiene permisos para realizar la petición solicitada”.
 
+
+TT Ejercicio 2 - Generar paquete server
+
+Se debe separar la estructura del proyecto, como segundo paso se debe generar
+el paquete server donde se agregaran las funcionalidades del proyecto que dependan
+de paquetes externos y el main del programa.
+
+Dentro del paquete deben estar:
+El main del programa.
+Se debe importar e inyectar el repositorio, servicio y handler
+Se debe implementar el router para los diferentes endpoints
+
 */
 
 import (
@@ -72,36 +84,32 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/handler"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/internal/transactions"
 )
-
-type Request struct {
-	ID       int     `json:"ID"`
-	Codigo   string  `json:"cod" binding:"required"`
-	Moneda   string  `json:"currency" binding:"required"`
-	Monto    float64 `json:"amount" binding:"required"`
-	Emisor   string  `json:"sender" binding:"required"`
-	Receptor string  `json:"receiver" binding:"required"`
-	Fecha    string  `json:"date" binding:"required"`
-}
 
 const (
 	filePath = "./transactions.json"
 	Token    = "12345"
 )
 
-var transactions []Request
-
 func main() {
 
-	fmt.Println(ReadJson(filePath))
+	//fmt.Println(ReadJson(filePath))
+
+	repo := transactions.NewRepository()
+	service := transactions.NewService()
+
+	t := handler.NewTransaction(service)
 
 	router := gin.Default()
 
-	router.GET("/hello", func(ctx *gin.Context) {
+	/*router.GET("/hello", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "Hola Juani!",
 		})
 	})
+	*/
 
 	transactionsaux, err := ReadJson(filePath)
 	if err != nil {
@@ -130,13 +138,12 @@ func AddTransaction() gin.HandlerFunc {
 			return
 		}
 
-		var r Request
+		var t Transaction
 		if err := ctx.ShouldBindJSON(&r); err != nil {
 			ctx.JSON(404, gin.H{"error": fmt.Errorf("field %s is required", err.Error())})
 			return
 		}
-		r.ID = len(transactions) + 1
-		transactions = append(transactions, r)
+
 		ctx.JSON(200, gin.H{"transaction added": r})
 	}
 
