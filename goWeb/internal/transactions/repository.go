@@ -1,5 +1,7 @@
 package transactions
 
+import "fmt"
+
 /*
 Repositorio, debe tener el acceso a la variable guardada en memoria.
 Se debe crear el archivo repository.go
@@ -28,6 +30,9 @@ type Repository interface {
 	GetAll() ([]Transaction, error)
 	AddTransaction(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	LastID() (int, error)
+	Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Delete(ID int) error
+	UpdateCodnAmount(ID int, cod string, amount float64) (Transaction, error)
 }
 
 type repository struct{}
@@ -50,4 +55,53 @@ func (r *repository) GetAll() ([]Transaction, error) {
 
 func (r *repository) LastID() (int, error) {
 	return lastID, nil
+}
+
+func (r *repository) Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
+	t := Transaction{Codigo: cod, Moneda: currency, Monto: amount, Emisor: sender, Receptor: receiver, Fecha: date}
+	updated := false
+	for i := range ts {
+		if ts[i].ID == ID {
+			t.ID = ID
+			ts[i] = t
+			updated = true
+		}
+	}
+	if !updated {
+		return Transaction{}, fmt.Errorf("transaction with id: %d not found", ID)
+	}
+	return t, nil
+}
+
+func (r *repository) Delete(ID int) error {
+	deleted := false
+	var index int
+	for i := range ts {
+		if ts[i].ID == ID {
+			index = i
+			deleted = true
+		}
+	}
+	if !deleted {
+		return fmt.Errorf("transaction with id %d not found", ID)
+	}
+	ts = append(ts[:index], ts[index+1:]...)
+	return nil
+}
+
+func (r *repository) UpdateCodnAmount(ID int, cod string, amount float64) (Transaction, error) {
+	var t Transaction
+	updated := false
+	for i := range ts {
+		if ts[i].ID == ID {
+			ts[i].Codigo = cod
+			ts[i].Monto = amount
+			t = ts[i]
+			updated = true
+		}
+	}
+	if !updated {
+		return Transaction{}, fmt.Errorf("Transaction with id %d not found", ID)
+	}
+	return t, nil
 }

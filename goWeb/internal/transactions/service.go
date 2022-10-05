@@ -13,6 +13,9 @@ las operaciones a realizar (GetAll, Store, etc..).
 type Service interface {
 	GetAll() ([]Transaction, error)
 	AddTransaction(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Delete(Id int) error
+	UpdateCodnAmount(ID int, cod string, amount float64) (Transaction, error)
 }
 
 type service struct {
@@ -45,4 +48,16 @@ func (s *service) AddTransaction(cod, currency string, amount float64, sender, r
 		return Transaction{}, err
 	}
 	return transaction, nil
+}
+
+func (s *service) Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
+	return s.repository.Update(ID, cod, currency, amount, sender, receiver, date)
+}
+
+func (s *service) Delete(ID int) error {
+	return s.repository.Delete(ID)
+}
+
+func (s *service) UpdateCodnAmount(ID int, cod string, amount float64) (Transaction, error) {
+	return s.repository.UpdateCodnAmount(ID, cod, amount)
 }
