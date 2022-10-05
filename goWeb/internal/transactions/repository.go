@@ -28,7 +28,7 @@ var lastID int
 
 type Repository interface {
 	GetAll() ([]Transaction, error)
-	AddTransaction(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Store(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	LastID() (int, error)
 	Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	Delete(ID int) error
@@ -41,7 +41,7 @@ func NewRepository() Repository {
 	return &repository{}
 }
 
-func (r *repository) AddTransaction(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
+func (r *repository) Store(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
 
 	t := Transaction{ID, cod, currency, amount, sender, receiver, date}
 	ts = append(ts, t)

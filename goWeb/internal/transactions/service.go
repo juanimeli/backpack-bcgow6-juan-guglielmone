@@ -12,7 +12,7 @@ las operaciones a realizar (GetAll, Store, etc..).
 
 type Service interface {
 	GetAll() ([]Transaction, error)
-	AddTransaction(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Store(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	Delete(Id int) error
 	UpdateCodnAmount(ID int, cod string, amount float64) (Transaction, error)
@@ -36,14 +36,14 @@ func (s *service) GetAll() ([]Transaction, error) {
 	return t, nil
 }
 
-func (s *service) AddTransaction(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
+func (s *service) Store(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
 	lastID, err := s.repository.LastID()
 	if err != nil {
 		return Transaction{}, err
 	}
 	lastID++
 
-	transaction, err := s.repository.AddTransaction(lastID, cod, currency, amount, sender, receiver, date)
+	transaction, err := s.repository.Store(lastID, cod, currency, amount, sender, receiver, date)
 	if err != nil {
 		return Transaction{}, err
 	}

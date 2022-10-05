@@ -104,15 +104,47 @@ campo (a elección)
 3. En caso de no existir, retornar un error 404
 4. Realizar las validaciones de los 2 campos a enviar
 
+
+TT - Ejercicio 1 - Configuración ENV
+
+Configurar para que el token sea tomado de las variables de entorno al momento de realizar
+la validación, para eso se deben realizar los siguientes pasos:
+1. Configurar la aplicación para que tome los valores que se encuentran en el archivo
+.env como variable de entorno.
+2. Quitar el valor del token del código y agregar como variable de entorno.
+3. Acceder al valor del token mediante la variable de entorno.
+
+TT - Ejercicio 2 - Guardar información
+Se debe implementar la funcionalidad para guardar la información de la petición en un
+archivo json, para eso se deben realizar los siguientes pasos:
+1. En lugar de guardar los valores de nuestra entidad en memoria, se debe crear un
+archivo; los valores que se vayan agregando se guardan en él.
+
+TT - Ejercicio 3 - Leer información
+
+Se debe implementar la funcionalidad para leer la información requerida en la petición del
+archivo json generado al momento de guardar, para eso se deben realizar los siguientes
+pasos:
+
+1. En lugar de leer los valores de nuestra entidad en memoria, se debe obtener del
+archivo generado en el punto anterior.
 */
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/cmd/server/handler"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/internal/transactions"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("error: file .env is broken or does not exist")
+	}
 
 	//fmt.Println(ReadJson(filePath))
 
@@ -141,7 +173,7 @@ func main() {
 	transactionsR := router.Group("/transactions")
 	{
 		transactionsR.GET("/", t.GetAll())
-		transactionsR.POST("/", t.AddTransaction())
+		transactionsR.POST("/", t.Store())
 		transactionsR.PUT("/:ID", t.Update())
 		transactionsR.DELETE("/:ID", t.Delete())
 		transactionsR.PATCH("/:ID", t.UpdateCodnAmount())
