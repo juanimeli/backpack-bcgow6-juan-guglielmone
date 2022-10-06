@@ -128,6 +128,23 @@ pasos:
 
 1. En lugar de leer los valores de nuestra entidad en memoria, se debe obtener del
 archivo generado en el punto anterior.
+
+Clase 4
+TM - Ejercicio 1 - Manejo de respuestas genéricas
+Se requiere implementar un manejo de respuestas genéricas para enviar siempre el mismo formato
+en las peticiones. Para lograrlo se deben realizar los siguientes pasos:
+Generar el paquete web dentro del directorio pkg.
+Realizar la estructura Response con los capos: code, data y error:
+code tendra el codigo de retorno.
+data tendrá la estructura que envía la aplicación (en caso que no haya error).
+error tendrá el error recibido en formato texto (en caso que haya error).
+Desarrollar una función que reciba el code cómo entero, data como interfaz y error como string.
+La función debe retornar en base al código, si es una respuesta con el data o con el error.
+Implementar esta función en todos los retornos de los controladores, antes de enviar la respuesta
+al cliente la función debe generar la estructura que definimos.
+
+
+
 */
 
 import (
@@ -140,6 +157,10 @@ import (
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/pkg/store"
 )
 
+const (
+	dbFilePath = "./transactions.json"
+)
+
 func main() {
 
 	err := godotenv.Load()
@@ -149,7 +170,7 @@ func main() {
 
 	//fmt.Println(ReadJson(filePath))
 
-	db := store.New(store.FileType, "./transactions.json")
+	db := store.New(store.FileType, dbFilePath)
 	repo := transactions.NewRepository(db)
 	service := transactions.NewService(repo)
 

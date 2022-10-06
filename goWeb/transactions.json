@@ -1,20 +1,29 @@
 [
   {
     "ID": 1,
-    "cod": "AR45JA3",
-    "currency": "USD",
-    "amount": 56.99,
-    "sender": "Juan",
-    "receiver": "Martin",
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
     "date": "2022-10-05T12:28:18.836"
   },
   {
     "ID": 2,
-    "cod": "AR45JA3",
-    "currency": "UYU",
-    "amount": 5697.99,
-    "sender": "Juan",
-    "receiver": "Martin",
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
+    "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 3,
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
     "date": "2022-10-05T12:28:18.836"
   },
   {
@@ -28,6 +37,42 @@
   },
   {
     "ID": 5,
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
+    "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 6,
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
+    "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 7,
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
+    "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 8,
+    "cod": "PARCH COD",
+    "currency": "PATCH COD",
+    "amount": 0.99,
+    "sender": "NUEPUTTTTTTVAA",
+    "receiver": "PUT",
+    "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 9,
     "cod": "PARCH COD",
     "currency": "PATCH COD",
     "amount": 0.99,
