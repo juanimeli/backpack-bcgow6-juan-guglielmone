@@ -137,6 +137,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/cmd/server/handler"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/internal/transactions"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/pkg/store"
 )
 
 func main() {
@@ -148,7 +149,8 @@ func main() {
 
 	//fmt.Println(ReadJson(filePath))
 
-	repo := transactions.NewRepository()
+	db := store.New(store.FileType, "./transactions.json")
+	repo := transactions.NewRepository(db)
 	service := transactions.NewService(repo)
 
 	t := handler.NewTransaction(service)
