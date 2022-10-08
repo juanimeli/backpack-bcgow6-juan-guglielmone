@@ -149,18 +149,29 @@ al cliente la función debe generar la estructura que definimos.
 
 import (
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/cmd/server/handler"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/docs"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/internal/transactions"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goWeb/pkg/store"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 const (
 	dbFilePath = "./transactions.json"
 )
 
+// @title MELI Bootcamp Go W6 - API
+// @version 4.2
+// @description This API handle transactions
+// @termsOfService https://developers.mercadolibre.com.ar/es_ar/terminos-y-condiciones
+
+// @contact.name API Support
+// @contact.url http://www.apache.org/licenses/LICENSE-2.0.html
 func main() {
 
 	err := godotenv.Load()
@@ -177,6 +188,9 @@ func main() {
 	t := handler.NewTransaction(service)
 
 	router := gin.Default()
+
+	docs.SwaggerInfo.Host = os.Getenv("HOST")
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	/*router.GET("/hello", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{

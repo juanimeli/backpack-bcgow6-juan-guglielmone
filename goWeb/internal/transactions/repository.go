@@ -1,5 +1,9 @@
 package transactions
 
+/*
+en repository.go nos conectamos con la base de datos y recibe comunicaciones de service.go
+*/
+
 import (
 	"fmt"
 

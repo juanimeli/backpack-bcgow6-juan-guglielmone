@@ -79,5 +79,14 @@
     "sender": "NUEPUTTTTTTVAA",
     "receiver": "PUT",
     "date": "2022-10-05T12:28:18.836"
+  },
+  {
+    "ID": 10,
+    "cod": "string",
+    "currency": "string",
+    "amount": 0,
+    "sender": "string",
+    "receiver": "string",
+    "date": "string"
   }
 ]

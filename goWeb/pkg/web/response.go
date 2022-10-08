@@ -1,4 +1,6 @@
-package web
+package web // Este paquete es para el manejo de respuestas. Sustituye el gin.H que enviamos en
+// el segundo argumento de ctx.JSON en el handler. La validacion de la request la seguimos haciendo
+// igual que antes en el handler.
 
 import (
 	"strconv"

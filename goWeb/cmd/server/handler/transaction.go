@@ -43,6 +43,18 @@ func NewTransaction(t transactions.Service) *Transaction {
 	}
 }
 
+// StoreNewTransaction godoc
+// @Summary List new Transaction
+// @Tags Transactions
+// @Description post new Transaction and save into de db json file
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param transaction body request true "Transaction to store"
+// @Success 200 {object} web.Response "Transaction Stored"
+// @Failure 401 {object} web.Response "Unauthorized"
+// @Failure 400 {object} web.Response "Invalid parameter"
+// @Router /transactions [post]
 func (c *Transaction) Store() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
@@ -53,13 +65,13 @@ func (c *Transaction) Store() gin.HandlerFunc {
 
 		var r request
 		if err := ctx.ShouldBindJSON(&r); err != nil {
-			ctx.JSON(404, web.NewResponse(401, nil, fmt.Sprintf("field %s is required", err.Error())))
+			ctx.JSON(400, web.NewResponse(400, nil, fmt.Sprintf("field %s is required", err.Error())))
 			return
 		}
 
 		t, err := c.service.Store(r.Codigo, r.Moneda, r.Monto, r.Emisor, r.Receptor, r.Fecha)
 		if err != nil {
-			ctx.JSON(401, web.NewResponse(401, nil, err.Error()))
+			ctx.JSON(400, web.NewResponse(400, nil, err.Error()))
 			return
 		}
 		ctx.JSON(200, web.NewResponse(200, t, ""))
@@ -67,16 +79,38 @@ func (c *Transaction) Store() gin.HandlerFunc {
 
 }
 
+// ListTransactions godoc
+// @Summary List existing transactions
+// @Tags Transactions
+// @Description get transactions from json db file
+// @Produce json
+// @Success 200 {object} web.Response "List Transactions"
+// @Failure 404 {object} web.Response "Transactions not found"
+// @Router /transactions [get]
 func (c *Transaction) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		t, err := c.service.GetAll()
 		if err != nil {
-			ctx.JSON(400, web.NewResponse(400, nil, err.Error()))
+			ctx.JSON(404, web.NewResponse(404, nil, err.Error()))
 		}
 		ctx.JSON(200, web.NewResponse(200, t, ""))
 	}
 
 }
+
+// UpdateTransaction godoc
+// @Summary Update Transaction
+// @Tags Transactions
+// @Description update all the parameters of an existing Transaction of the db json file
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param transaction body request true "New paramaters to update the existing Transaction"
+// @Success 200 {object} web.Response "Transaction Updated"
+// @Failure 401 {object} web.Response "Unauthorized"
+// @Failure 400 {object} web.Response "Invalid parameter"
+// @Failure 404 {object} web.Response "Transaction not found"
+// @Router /transactions/{ID} [put]
 func (c *Transaction) Update() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
@@ -128,6 +162,17 @@ func (c *Transaction) Update() gin.HandlerFunc {
 	}
 }
 
+// DeleteTransaction godoc
+// @Summary Delete Transaction
+// @Tags Transactions
+// @Description Delete an existing Transaction of the db json file
+// @Produce json
+// @Param token header string true "token"
+// @Success 200 {object} web.Response "Transaction Deleted"
+// @Failure 401 {object} web.Response "Unauthorized"
+// @Failure 400 {object} web.Response "Invalid parameter"
+// @Failure 404 {object} web.Response "Transaction not found"
+// @Router /transactions/{ID} [delete]
 func (c *Transaction) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
@@ -142,13 +187,27 @@ func (c *Transaction) Delete() gin.HandlerFunc {
 		}
 		err = c.service.Delete(int(id))
 		if err != nil {
-			ctx.JSON(401, web.NewResponse(401, nil, err.Error()))
+			ctx.JSON(404, web.NewResponse(404, nil, err.Error()))
 			return
 		}
 		ctx.JSON(200, web.NewResponse(200, fmt.Sprintf("transaction with id %d has been deleted", id), ""))
 
 	}
 }
+
+// UpdateCodnAmount Transaction godoc
+// @Summary Partial Update on a Transaction
+// @Tags Transactions
+// @Description update cod and amount parameters of an existing Transaction of the db json file
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param transaction body request true "New paramaters to update the existing Transaction"
+// @Success 200 {object} web.Response "cod and amount Transaction Updated"
+// @Failure 401 {object} web.Response "Unauthorized"
+// @Failure 400 {object} web.Response "Invalid parameter"
+// @Failure 404 {object} web.Response "Transaction not found"
+// @Router /transactions/{ID} [patch]
 func (c *Transaction) UpdateCodnAmount() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
