@@ -22,4 +22,26 @@ invoca con 0 en el denominador.
 1. Dentro de la carpeta go-testing crear un archivo dividir.go con la función a probar.
 2. Dentro de la carpeta go-testing crear un archivo dividir test.go con el test diseñado.
 */
-func main() {}
+
+import (
+	"fmt"
+
+	"github.com/github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/clase_1_2/dividir"
+	"github.com/github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/clase_1_2/ordenamiento"
+)
+
+func main() {
+
+	s := []int{3, 4, 1, 6, 8, 2}
+
+	ordenamiento.OrderSlice(s)
+
+	fmt.Println(s)
+
+	num1 := 10
+	den := 2
+
+	res, _ := dividir.Dividir(num1, den)
+	fmt.Println(res)
+
+}

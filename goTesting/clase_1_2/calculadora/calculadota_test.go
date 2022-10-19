@@ -1,6 +1,10 @@
 package calculadora
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestRestar(t *testing.T) {
 
@@ -15,10 +19,11 @@ func TestRestar(t *testing.T) {
 
 	// Test
 
-	if resultado != esperado {
+	assert.Equal(t, esperado, resultado, "Funcion Resta() dio resultado: %d, y se esperaba %d", resultado, esperado)
+	/*if resultado != esperado {
 
 		t.Errorf("Funcion Resta() dio resultado: %d, y se esperaba %d", resultado, esperado)
 
 	}
-
+	*/
 }
