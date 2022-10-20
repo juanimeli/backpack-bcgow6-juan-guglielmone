@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -46,4 +47,46 @@ func TestGetAll(t *testing.T) {
 	//assert
 	assert.Nil(t, err)
 	assert.Equal(t, database, result)
+}
+
+func TestUpdate(t *testing.T) {
+
+	//arrange
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+	}
+
+	db := MockDB{
+		dataMock: database,
+	}
+	repo := NewRepository(&db)
+
+	expected := Transaction{
+		ID:       1,
+		Codigo:   "AFTER UPDATE",
+		Moneda:   "USD",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Pedro",
+		Fecha:    "23/10/2022",
+	}
+
+	//act
+
+	result, err := repo.UpdateCodnAmount(1, "AFTER UPDATE", 20.00)
+	if err != nil {
+		fmt.Println("ERRORRR")
+	}
+
+	assert.True(t, db.readCheck)
+	assert.Equal(t, expected, result)
+
 }
