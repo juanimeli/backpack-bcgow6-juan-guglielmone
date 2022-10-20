@@ -1,13 +1,5 @@
 package handler
 
-/*
-El paquete handler con el controlador de la entidad seleccionada.
-Se debe generar la estructura request
-Se debe generar la estructura del controlador que tenga como campo el servicio
-Se debe generar la función que retorne el controlador
-Se deben generar todos los métodos correspondientes a los endpoints
-*/
-
 import (
 	"fmt"
 	"os"
@@ -18,8 +10,7 @@ import (
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/pkg/web"
 )
 
-type request struct { //la estructura request es igual
-	//a la de la entidad sin el ID
+type request struct {
 	Codigo   string  `json:"cod"`      // binding:"required"`
 	Moneda   string  `json:"currency"` // binding:"required"`
 	Monto    float64 `json:"amount"`   // binding:"required"`
@@ -29,12 +20,7 @@ type request struct { //la estructura request es igual
 }
 
 type Transaction struct {
-	service transactions.Service //la estructura dela entidad tiene como atributo
-	//la estructura del servicio
-	//y la estructura del servicio tiene
-	//como atributo la estructura del repositorio
-	//la estructura del repo esta vacia pero contendria
-	// la base de datos.
+	service transactions.Service
 }
 
 func NewTransaction(t transactions.Service) *Transaction {
@@ -241,17 +227,3 @@ func (c *Transaction) UpdateCodnAmount() gin.HandlerFunc {
 		ctx.JSON(200, web.NewResponse(200, t, ""))
 	}
 }
-
-/*transactions, err := ReadJson(filePath)
-if err != nil {
-	ctx.JSON(400, err.Error())
-	return
-}*/
-/*
-	p, err := c.service.Update(int(id), req.Name, req.Type, req.Count, req.Price)
-	if err != nil {
-		ctx.JSON(404, gin.H{"error": err.Error()})
-		return
-	}
-	ctx.JSON(200, p)
-}*/

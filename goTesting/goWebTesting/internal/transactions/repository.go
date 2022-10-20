@@ -1,25 +1,10 @@
 package transactions
 
-/*
-en repository.go nos conectamos con la base de datos y recibe comunicaciones de service.go
-*/
-
 import (
 	"fmt"
 
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/pkg/store"
 )
-
-/*
-Repositorio, debe tener el acceso a la variable guardada en memoria.
-Se debe crear el archivo repository.go
-Se debe crear la estructura de la entidad
-Se deben crear las variables globales donde guardar las entidades
-Se debe generar la interface Repository con todos sus métodos
-Se debe generar la estructura repository
-Se debe generar una función que devuelva el Repositorio
-Se deben implementar todos los métodos correspondientes a las operaciones a realizar (GetAll, Store, etc..)
-*/
 
 type Transaction struct {
 	ID       int     `json:"ID"`
@@ -31,7 +16,6 @@ type Transaction struct {
 	Fecha    string  `json:"date" binding:"required"`
 }
 
-// var ts []Transaction
 var lastID int
 
 type Repository interface {
@@ -61,7 +45,7 @@ func (r *repository) Store(ID int, cod, currency string, amount float64, sender,
 	}
 	t := Transaction{ID, cod, currency, amount, sender, receiver, date}
 	ts = append(ts, t)
-	lastID = t.ID // actualiza el lastID global cuando se va a agregar una transaccion
+	lastID = t.ID
 	if err := r.db.Write(ts); err != nil {
 		return Transaction{}, fmt.Errorf("error: writing db file")
 	}
@@ -84,9 +68,7 @@ func (r *repository) LastID() (int, error) {
 	if len(ts) == 0 {
 		return 0, nil
 	}
-	return ts[len(ts)-1].ID, nil //Esto nos puede generar error si lo dejamos asi sin validar
-	// otras opciones ya que si borramos luego registros al definir
-	//el las ID con el largo de nuestro slice puede coincidir con registros previos.
+	return ts[len(ts)-1].ID, nil
 }
 
 func (r *repository) Update(ID int, cod, currency string, amount float64, sender, receiver, date string) (Transaction, error) {

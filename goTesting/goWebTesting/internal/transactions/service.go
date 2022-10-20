@@ -1,15 +1,5 @@
 package transactions
 
-/* Dentro del paquete deben estar las capas:
-Servicio, debe contener la lógica de nuestra aplicación.
-Se debe crear el archivo service.go.
-Se debe generar la interface Service con todos sus métodos.
-Se debe generar la estructura service que contenga el repositorio.
-Se debe generar una función que devuelva el Servicio.
-Se deben implementar todos los métodos correspondientes a
-las operaciones a realizar (GetAll, Store, etc..).
-*/
-
 type Service interface {
 	GetAll() ([]Transaction, error)
 	Store(cod, currency string, amount float64, sender, receiver, date string) (Transaction, error)
