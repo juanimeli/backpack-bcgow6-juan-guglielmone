@@ -1,7 +1,6 @@
 package transactions
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -82,11 +81,10 @@ func TestUpdate(t *testing.T) {
 	//act
 
 	result, err := repo.UpdateCodnAmount(1, "AFTER UPDATE", 20.00)
-	if err != nil {
-		fmt.Println("ERRORRR")
-	}
+	assert.Nil(t, err)
 
 	assert.True(t, db.readCheck)
-	assert.Equal(t, expected, result)
+	assert.Equal(t, expected, result) // se puede hacer dos Equal y solo chequear los campos result.Codigo & result.Monto.
+	//En mi caso iguale el 100% de la Transaction.
 
 }
