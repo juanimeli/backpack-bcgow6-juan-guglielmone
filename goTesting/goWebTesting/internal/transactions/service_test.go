@@ -38,7 +38,7 @@ func TestGetAllServiceIntegration(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock: database,
+		DataMock: database,
 	}
 	repo := NewRepository(&MockStorage)
 	service := NewService(repo)
@@ -60,7 +60,7 @@ func TestGetAllServiceIntegrationFail(t *testing.T) {
 	//arrange
 	errorEsperado := errors.New("Soy un error de lectura >:(")
 	MockStorage := MockDB{
-		dataMock:   nil,
+		DataMock:   nil,
 		errOnRead:  errors.New("Soy un error de lectura >:("),
 		errOnWrite: nil,
 	}
@@ -110,7 +110,7 @@ func TestStoreServiceIntegration(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock: database,
+		DataMock: database,
 	}
 	repo := NewRepository(&MockStorage)
 	service := NewService(repo)
@@ -128,7 +128,7 @@ func TestStoreServiceIntegrationWriteFail(t *testing.T) {
 	// arrange
 	errorEsperado := errors.New("Soy un error de escritura")
 	mockStorage := MockDB{
-		dataMock:   nil,
+		DataMock:   nil,
 		errOnRead:  nil,
 		errOnWrite: errors.New("Soy un error de escritura"),
 	}
@@ -159,7 +159,7 @@ func TestStoreServiceIntegrationReadFail(t *testing.T) {
 	// arrange
 	errorEsperado := errors.New("Soy un error de lectura")
 	mockStorage := MockDB{
-		dataMock:   nil,
+		DataMock:   nil,
 		errOnRead:  errors.New("Soy un error de lectura"),
 		errOnWrite: nil,
 	}
@@ -200,7 +200,7 @@ func TestUpdateServiceIntegration(t *testing.T) {
 	}
 	//arrange
 	mockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		errOnRead:  nil,
 		errOnWrite: nil,
 		readCheck:  false,
@@ -234,7 +234,7 @@ func TestUpdateServiceIntegrationReadFail(t *testing.T) {
 	//arrange
 	errorEsperado := errors.New("Soy un error de Read")
 	mockStorage := MockDB{
-		dataMock:   nil,
+		DataMock:   nil,
 		errOnRead:  errors.New("Soy un error de Read"),
 		errOnWrite: nil,
 		readCheck:  false,
@@ -281,7 +281,7 @@ func TestUpdateServiceIntegrationWriteFail(t *testing.T) {
 	}
 	errorEsperado := errors.New("Soy un error de Write")
 	mockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		errOnRead:  nil,
 		errOnWrite: errors.New("Soy un error de Write"),
 		readCheck:  false,
@@ -336,7 +336,7 @@ func TestDeleteServiceIntegration(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		readCheck:  false,
 		errOnRead:  nil,
 		errOnWrite: nil,
@@ -351,7 +351,7 @@ func TestDeleteServiceIntegration(t *testing.T) {
 	// assert
 	assert.Nil(t, err)
 	assert.True(t, MockStorage.readCheck)
-	assert.Equal(t, 1, len(MockStorage.dataMock))
+	assert.Equal(t, 1, len(MockStorage.DataMock))
 
 }
 
@@ -380,7 +380,7 @@ func TestDeleteServiceIntegrationReadFail(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		readCheck:  false,
 		errOnRead:  errors.New("Hubo un error en la lectura"),
 		errOnWrite: nil,
@@ -424,7 +424,7 @@ func TestDeleteServiceIntegrationWriteFail(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		readCheck:  false,
 		errOnRead:  nil,
 		errOnWrite: errors.New("Hubo un error en la escritura"),

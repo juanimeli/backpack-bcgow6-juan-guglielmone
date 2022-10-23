@@ -31,7 +31,7 @@ func (std StubDB) Write(data interface{}) error {
 
 type MockDB struct {
 	readCheck  bool
-	dataMock   []Transaction
+	DataMock   []Transaction
 	errOnRead  error
 	errOnWrite error
 }
@@ -42,7 +42,7 @@ func (m *MockDB) Read(data interface{}) error {
 	}
 
 	castedData := data.(*[]Transaction)
-	*castedData = m.dataMock
+	*castedData = m.DataMock
 	m.readCheck = true // bandera que indica que el metodo Read() fue llamado en el proceso de Update()
 	return nil
 }
@@ -55,6 +55,6 @@ func (m *MockDB) Write(data interface{}) error {
 		return m.errOnWrite
 	}
 	castedData := data.([]Transaction)
-	m.dataMock = castedData
+	m.DataMock = castedData
 	return nil
 }

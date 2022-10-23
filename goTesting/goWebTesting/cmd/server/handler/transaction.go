@@ -60,7 +60,7 @@ func (c *Transaction) Store() gin.HandlerFunc {
 			ctx.JSON(400, web.NewResponse(400, nil, err.Error()))
 			return
 		}
-		ctx.JSON(200, web.NewResponse(200, t, ""))
+		ctx.JSON(201, web.NewResponse(201, t, ""))
 	}
 
 }

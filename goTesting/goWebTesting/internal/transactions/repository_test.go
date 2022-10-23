@@ -75,7 +75,7 @@ func TestUpdateCodnAmount(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:  database,
+		DataMock:  database,
 		readCheck: false,
 	}
 	repo := NewRepository(&MockStorage)
@@ -141,7 +141,7 @@ func TestStore(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock: database,
+		DataMock: database,
 	}
 	repo := NewRepository(&MockStorage)
 
@@ -169,7 +169,7 @@ func TestUpdate(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		readCheck:  false,
 		errOnRead:  nil,
 		errOnWrite: nil,
@@ -221,7 +221,7 @@ func TestDelete(t *testing.T) {
 	}
 
 	MockStorage := MockDB{
-		dataMock:   database,
+		DataMock:   database,
 		readCheck:  false,
 		errOnRead:  nil,
 		errOnWrite: nil,
@@ -235,6 +235,6 @@ func TestDelete(t *testing.T) {
 	// assert
 	assert.Nil(t, err)
 	assert.True(t, MockStorage.readCheck)
-	assert.Equal(t, 1, len(MockStorage.dataMock))
+	assert.Equal(t, 1, len(MockStorage.DataMock))
 
 }
