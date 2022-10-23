@@ -124,13 +124,44 @@ func TestStoreServiceIntegration(t *testing.T) {
 	assert.Equal(t, esperado, result)
 }
 
-func TestStoreServiceIntegrationFail(t *testing.T) {
+func TestStoreServiceIntegrationWriteFail(t *testing.T) {
 	// arrange
 	errorEsperado := errors.New("Soy un error de escritura")
 	mockStorage := MockDB{
 		dataMock:   nil,
 		errOnRead:  nil,
 		errOnWrite: errors.New("Soy un error de escritura"),
+	}
+	repo := NewRepository(&mockStorage)
+	service := NewService(repo)
+
+	newTrans := Transaction{
+		ID:       3,
+		Codigo:   "NEW",
+		Moneda:   "UYU",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Martin",
+		Fecha:    "22/10",
+	}
+
+	// act
+
+	result, err := service.Store(newTrans.Codigo, newTrans.Moneda, newTrans.Monto, newTrans.Emisor, newTrans.Receptor, newTrans.Fecha)
+
+	// assert
+
+	assert.Equal(t, errorEsperado, err)
+	assert.Empty(t, result)
+}
+
+func TestStoreServiceIntegrationReadFail(t *testing.T) {
+	// arrange
+	errorEsperado := errors.New("Soy un error de lectura")
+	mockStorage := MockDB{
+		dataMock:   nil,
+		errOnRead:  errors.New("Soy un error de lectura"),
+		errOnWrite: nil,
 	}
 	repo := NewRepository(&mockStorage)
 	service := NewService(repo)
