@@ -8,18 +8,19 @@ import (
 
 func TestRestar(t *testing.T) {
 
-	// Datos para test
+	// Datos para test ARRANGE
 	num1 := 20
 	num2 := 5
 	esperado := 15
 
-	// Act
+	// Act ACT
 
 	resultado := Restar(num1, num2)
 
-	// Test
+	// Test ASSERT
 
-	assert.Equal(t, esperado, resultado, "Funcion Resta() dio resultado: %d, y se esperaba %d", resultado, esperado)
+	assert.Equal(t, esperado, resultado,
+		"Funcion Resta() dio resultado: %d, y se esperaba %d", resultado, esperado)
 	/*if resultado != esperado {
 
 		t.Errorf("Funcion Resta() dio resultado: %d, y se esperaba %d", resultado, esperado)

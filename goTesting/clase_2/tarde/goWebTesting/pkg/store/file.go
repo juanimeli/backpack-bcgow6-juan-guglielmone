@@ -1,11 +1,11 @@
 package store
 
 import (
-	"encoding/json"
 	"os"
+	"encoding/json"
 )
 
-type Store interface {
+type Store interface{
 	Read(data interface{}) error
 	Write(data interface{}) error
 }
