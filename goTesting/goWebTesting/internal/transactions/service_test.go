@@ -153,5 +153,130 @@ func TestStoreServiceIntegrationFail(t *testing.T) {
 
 	assert.Equal(t, errorEsperado, err)
 	assert.Empty(t, result)
+}
+
+func TestUpdateServiceIntegration(t *testing.T) {
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+	}
+	//arrange
+	mockStorage := MockDB{
+		dataMock:   database,
+		errOnRead:  nil,
+		errOnWrite: nil,
+		readCheck:  false,
+	}
+	repo := NewRepository(&mockStorage)
+	service := NewService(repo)
+
+	expected := Transaction{
+		ID:       1,
+		Codigo:   "AFTER UPDATE",
+		Moneda:   "USD AFTER",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Pedro",
+		Fecha:    "24/10/2022",
+	}
+
+	//act
+
+	result, err := service.Update(expected.ID, expected.Codigo, expected.Moneda, expected.Monto, expected.Emisor, expected.Receptor, expected.Fecha)
+
+	//assert
+	assert.Nil(t, err)
+	assert.True(t, mockStorage.readCheck)
+	assert.Equal(t, expected, result)
+
+}
+
+func TestUpdateServiceIntegrationReadFail(t *testing.T) {
+
+	//arrange
+	errorEsperado := errors.New("Soy un error de Read")
+	mockStorage := MockDB{
+		dataMock:   nil,
+		errOnRead:  errors.New("Soy un error de Read"),
+		errOnWrite: nil,
+		readCheck:  false,
+	}
+	repo := NewRepository(&mockStorage)
+	service := NewService(repo)
+
+	tUpdated := Transaction{
+		ID:       1,
+		Codigo:   "AFTER UPDATE",
+		Moneda:   "USD AFTER",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Pedro",
+		Fecha:    "24/10/2022",
+	}
+
+	//act
+
+	result, err := service.Update(tUpdated.ID, tUpdated.Codigo, tUpdated.Moneda,
+		tUpdated.Monto, tUpdated.Emisor, tUpdated.Receptor, tUpdated.Fecha)
+
+	//assert
+
+	assert.False(t, mockStorage.readCheck)
+	assert.Equal(t, errorEsperado, err)
+	assert.Empty(t, result)
+
+}
+
+func TestUpdateServiceIntegrationWriteFail(t *testing.T) {
+
+	//arrange
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+	}
+	errorEsperado := errors.New("Soy un error de Write")
+	mockStorage := MockDB{
+		dataMock:   database,
+		errOnRead:  nil,
+		errOnWrite: errors.New("Soy un error de Write"),
+		readCheck:  false,
+	}
+	repo := NewRepository(&mockStorage)
+	service := NewService(repo)
+
+	tUpdated := Transaction{
+		ID:       1,
+		Codigo:   "AFTER UPDATE",
+		Moneda:   "USD AFTER",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Pedro",
+		Fecha:    "24/10/2022",
+	}
+
+	//act
+
+	result, err := service.Update(tUpdated.ID, tUpdated.Codigo, tUpdated.Moneda,
+		tUpdated.Monto, tUpdated.Emisor, tUpdated.Receptor, tUpdated.Fecha)
+
+	//assert
+
+	assert.True(t, mockStorage.readCheck) // SI utiliza el metodo Read dentro de Update entonces deberia levantarse la bandera
+	assert.Equal(t, errorEsperado, err)
+	assert.Empty(t, result)
 
 }

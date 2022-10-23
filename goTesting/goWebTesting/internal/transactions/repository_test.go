@@ -59,7 +59,7 @@ func TestGetAll(t *testing.T) {
 	assert.Equal(t, database, result)
 }
 
-func TestUpdate(t *testing.T) {
+func TestUpdateCodnAmount(t *testing.T) {
 
 	//arrange
 	database := []Transaction{
@@ -152,4 +152,47 @@ func TestStore(t *testing.T) {
 	//assert
 	assert.Nil(t, err)
 	assert.Equal(t, esperado, result)
+}
+
+func TestUpdate(t *testing.T) {
+	//arrange
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+	}
+
+	MockStorage := MockDB{
+		dataMock:   database,
+		readCheck:  false,
+		errOnRead:  nil,
+		errOnWrite: nil,
+	}
+	repo := NewRepository(&MockStorage)
+
+	expected := Transaction{
+		ID:       1,
+		Codigo:   "AFTER UPDATE",
+		Moneda:   "USD AFTER",
+		Monto:    20.00,
+		Emisor:   "Juan",
+		Receptor: "Pedro",
+		Fecha:    "24/10/2022",
+	}
+
+	//act
+
+	result, err := repo.Update(1, "AFTER UPDATE", "USD AFTER", 20.00, "Juan", "Pedro", "24/10/2022")
+
+	// assert
+	assert.Nil(t, err)
+
+	assert.True(t, MockStorage.readCheck)
+	assert.Equal(t, expected, result)
 }

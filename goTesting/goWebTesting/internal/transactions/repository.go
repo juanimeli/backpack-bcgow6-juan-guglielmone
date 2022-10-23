@@ -64,7 +64,7 @@ func (r *repository) Update(ID int, cod, currency string, amount float64, sender
 	updated := false
 	var ts []Transaction
 	if err := r.db.Read(&ts); err != nil {
-		return Transaction{}, fmt.Errorf("somthing went wrong reading the file")
+		return Transaction{}, err
 	}
 
 	for i := range ts {
@@ -79,7 +79,7 @@ func (r *repository) Update(ID int, cod, currency string, amount float64, sender
 	}
 
 	if err := r.db.Write(ts); err != nil {
-		return Transaction{}, fmt.Errorf("error: writing db file")
+		return Transaction{}, err
 	}
 	return t, nil
 }
