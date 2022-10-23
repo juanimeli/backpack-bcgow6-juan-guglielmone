@@ -229,7 +229,7 @@ func TestUpdateServiceIntegrationReadFail(t *testing.T) {
 	//assert
 
 	assert.False(t, mockStorage.readCheck)
-	assert.Equal(t, errorEsperado, err)
+	assert.EqualError(t, err, errorEsperado.Error())
 	assert.Empty(t, result)
 
 }
@@ -276,7 +276,138 @@ func TestUpdateServiceIntegrationWriteFail(t *testing.T) {
 	//assert
 
 	assert.True(t, mockStorage.readCheck) // SI utiliza el metodo Read dentro de Update entonces deberia levantarse la bandera
-	assert.Equal(t, errorEsperado, err)
+	assert.EqualError(t, err, errorEsperado.Error())
 	assert.Empty(t, result)
+
+}
+
+func TestDeleteServiceIntegration(t *testing.T) {
+	//arrange
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+		{
+			ID:       2,
+			Codigo:   "asda",
+			Moneda:   "USD",
+			Monto:    44.00,
+			Emisor:   "Pedro",
+			Receptor: "Juan",
+			Fecha:    "24/10/2022",
+		},
+	}
+
+	MockStorage := MockDB{
+		dataMock:   database,
+		readCheck:  false,
+		errOnRead:  nil,
+		errOnWrite: nil,
+	}
+	repo := NewRepository(&MockStorage)
+	service := NewService(repo)
+
+	//act
+
+	err := service.Delete(1)
+
+	// assert
+	assert.Nil(t, err)
+	assert.True(t, MockStorage.readCheck)
+	assert.Equal(t, 1, len(MockStorage.dataMock))
+
+}
+
+func TestDeleteServiceIntegrationReadFail(t *testing.T) {
+	//arrange
+	errorEsperado := errors.New("Hubo un error en la lectura")
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+		{
+			ID:       2,
+			Codigo:   "asda",
+			Moneda:   "USD",
+			Monto:    44.00,
+			Emisor:   "Pedro",
+			Receptor: "Juan",
+			Fecha:    "24/10/2022",
+		},
+	}
+
+	MockStorage := MockDB{
+		dataMock:   database,
+		readCheck:  false,
+		errOnRead:  errors.New("Hubo un error en la lectura"),
+		errOnWrite: nil,
+	}
+	repo := NewRepository(&MockStorage)
+	service := NewService(repo)
+
+	//act
+
+	err := service.Delete(1)
+
+	// assert
+	assert.NotNil(t, err)
+	assert.False(t, MockStorage.readCheck)
+	assert.EqualError(t, err, errorEsperado.Error())
+
+}
+
+func TestDeleteServiceIntegrationWriteFail(t *testing.T) {
+	//arrange
+	errorEsperado := errors.New("Hubo un error en la escritura")
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+		{
+			ID:       2,
+			Codigo:   "asda",
+			Moneda:   "USD",
+			Monto:    44.00,
+			Emisor:   "Pedro",
+			Receptor: "Juan",
+			Fecha:    "24/10/2022",
+		},
+	}
+
+	MockStorage := MockDB{
+		dataMock:   database,
+		readCheck:  false,
+		errOnRead:  nil,
+		errOnWrite: errors.New("Hubo un error en la escritura"),
+	}
+	repo := NewRepository(&MockStorage)
+	service := NewService(repo)
+
+	//act
+
+	err := service.Delete(1)
+
+	// assert
+	assert.NotNil(t, err)
+	assert.True(t, MockStorage.readCheck)
+	assert.EqualError(t, err, errorEsperado.Error())
 
 }

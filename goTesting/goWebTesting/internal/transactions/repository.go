@@ -87,7 +87,7 @@ func (r *repository) Update(ID int, cod, currency string, amount float64, sender
 func (r *repository) Delete(ID int) error {
 	var ts []Transaction
 	if err := r.db.Read(&ts); err != nil {
-		return fmt.Errorf("somthing went wrong reading the file")
+		return err
 	}
 
 	deleted := false
@@ -104,7 +104,7 @@ func (r *repository) Delete(ID int) error {
 	ts = append(ts[:index], ts[index+1:]...)
 
 	if err := r.db.Write(ts); err != nil {
-		return fmt.Errorf("error: writing db file")
+		return err
 	}
 	return nil
 }

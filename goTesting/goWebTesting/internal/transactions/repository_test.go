@@ -196,3 +196,45 @@ func TestUpdate(t *testing.T) {
 	assert.True(t, MockStorage.readCheck)
 	assert.Equal(t, expected, result)
 }
+
+func TestDelete(t *testing.T) {
+	//arrange
+	database := []Transaction{
+		{
+			ID:       1,
+			Codigo:   "BEFORE UPDATE",
+			Moneda:   "USD",
+			Monto:    10.00,
+			Emisor:   "Juan",
+			Receptor: "Pedro",
+			Fecha:    "23/10/2022",
+		},
+		{
+			ID:       2,
+			Codigo:   "asda",
+			Moneda:   "USD",
+			Monto:    44.00,
+			Emisor:   "Pedro",
+			Receptor: "Juan",
+			Fecha:    "24/10/2022",
+		},
+	}
+
+	MockStorage := MockDB{
+		dataMock:   database,
+		readCheck:  false,
+		errOnRead:  nil,
+		errOnWrite: nil,
+	}
+	repo := NewRepository(&MockStorage)
+
+	//act
+
+	err := repo.Delete(1)
+
+	// assert
+	assert.Nil(t, err)
+	assert.True(t, MockStorage.readCheck)
+	assert.Equal(t, 1, len(MockStorage.dataMock))
+
+}
