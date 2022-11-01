@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"reflect"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -12,12 +14,20 @@ import (
 
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/cmd/server/handler"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/internal/transactions"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/pkg/store"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/goTesting/goWebTesting/pkg/web"
 )
 
-func createServer(MockStorage transactions.MockDB) *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
+var s = createServer()
 
-	repo := transactions.NewRepository(&MockStorage)
+func createServer() *gin.Engine {
+
+	err := os.Setenv("TOKEN", "12345")
+	if err != nil {
+		panic(err)
+	}
+	db := store.New(store.FileType, "./transactionstest.json")
+	repo := transactions.NewRepository(db)
 	service := transactions.NewService(repo)
 	t := handler.NewTransaction(service)
 
@@ -33,7 +43,7 @@ func createRequestTest(method, url, body string) (*http.Request, *httptest.Respo
 
 	req := httptest.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
 	req.Header.Add("Content-Type", "application/json")
-	//req.Header.Add("token", "12345")
+	req.Header.Add("token", os.Getenv("TOKEN"))
 
 	return req, httptest.NewRecorder()
 }
@@ -41,70 +51,27 @@ func createRequestTest(method, url, body string) (*http.Request, *httptest.Respo
 func TestGetAllTransactions(t *testing.T) {
 
 	//arrange
-	database := []transactions.Transaction{
-		{
-			ID:       123,
-			Codigo:   "asd",
-			Moneda:   "USD",
-			Monto:    40.00,
-			Emisor:   "Juan",
-			Receptor: "Pedro",
-			Fecha:    "23/10/2022",
-		},
-		{
-			ID:       124,
-			Codigo:   "asda",
-			Moneda:   "USD",
-			Monto:    44.00,
-			Emisor:   "Pedro",
-			Receptor: "Juan",
-			Fecha:    "24/10/2022",
-		},
-	}
 
-	MockStorage := transactions.MockDB{
-		DataMock: []transactions.Transaction{
-			{
-				ID:       123,
-				Codigo:   "asd",
-				Moneda:   "USD",
-				Monto:    40.00,
-				Emisor:   "Juan",
-				Receptor: "Pedro",
-				Fecha:    "23/10/2022",
-			},
-			{
-				ID:       124,
-				Codigo:   "asda",
-				Moneda:   "USD",
-				Monto:    44.00,
-				Emisor:   "Pedro",
-				Receptor: "Juan",
-				Fecha:    "24/10/2022",
-			},
-		},
-	}
-
-	var resp []transactions.Transaction
-	r := createServer(MockStorage)
 	req, rr := createRequestTest(http.MethodGet, "/transactions/", "")
 
 	//act
-	r.ServeHTTP(rr, req)
-	err := json.Unmarshal(rr.Body.Bytes(), &resp)
+	s.ServeHTTP(rr, req)
+	objRes := &web.Response{}
+	assert.Equal(t, http.StatusOK, rr.Code)
+	err := json.Unmarshal(rr.Body.Bytes(), &objRes)
+
+	data := reflect.ValueOf(objRes.Data).Len()
+	assert.Nil(t, err)
+	assert.True(t, data > 0)
 
 	//assert
-
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusOK, rr.Code)
-	assert.Equal(t, len(database), len(resp))
 
 }
 
 func TestSaveTransaction(t *testing.T) {
 
 	//arrange
-	mockStorage := transactions.MockDB{
+	/*mockStorage := transactions.MockDB{
 		DataMock: []transactions.Transaction{
 			{
 				ID:       123,
@@ -125,9 +92,9 @@ func TestSaveTransaction(t *testing.T) {
 				Fecha:    "24/10/2022",
 			},
 		},
-	}
+	} */
 	var resp transactions.Transaction
-	r := createServer(mockStorage)
+	r := createServer()
 	req, rr := createRequestTest(http.MethodPost, "/transactions/", `{
 		cod: "NEW", currency: "NEW", amount: 44.00, sender: "Pedro", receiver: "Juan", date: "24/10/2022",
 	}`)

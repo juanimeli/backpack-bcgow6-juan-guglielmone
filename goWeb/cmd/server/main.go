@@ -174,15 +174,18 @@ const (
 // @contact.url http://www.apache.org/licenses/LICENSE-2.0.html
 func main() {
 
-	err := godotenv.Load()
+	err := godotenv.Load() // iniciamos el archivo con las varaibles de entorno(token, HOST)
 	if err != nil {
 		log.Fatal("error: file .env is broken or does not exist")
 	}
 
 	//fmt.Println(ReadJson(filePath))
 
-	db := store.New(store.FileType, dbFilePath)
-	repo := transactions.NewRepository(db)
+	db := store.New(store.FileType, dbFilePath) // creamos una nueva base de datos  con la funcion de store.New
+	// le pasamos la contaste guardada en el pkge store para seleccionar el tipo de db
+	// y nos devuelve apuntando a la estructura fileStore con el path a la base de datos como atributo
+	//la funcion se enlaza con la interface Store para obtener las funcionalidades de Read and Write
+	repo := transactions.NewRepository(db) //
 	service := transactions.NewService(repo)
 
 	t := handler.NewTransaction(service)
@@ -207,15 +210,18 @@ func main() {
 	transactions = transactionsaux
 	*/
 
-	transactionsR := router.Group("/transactions")
+	transactionsR := router.Group("/transactions") // Crea un grupo de url que comienzan igual(/transactions)
 	{
-		transactionsR.GET("/", t.GetAll())
+		transactionsR.GET("/", t.GetAll()) // Si tuviesemos la misma ruta con el mismo metodo deberiamos diferenciarlo
+		// de otro modo tomara siempre la primera ruta que encuentre y ejecutara
+		//el handler correspondiente.
 		transactionsR.POST("/", t.Store())
 		transactionsR.PUT("/:ID", t.Update())
 		transactionsR.DELETE("/:ID", t.Delete())
 		transactionsR.PATCH("/:ID", t.UpdateCodnAmount())
 		//transactionsR.GET("?Moneda=USD", FilterTransactions)
 		//transactionsR.GET("/:ID", FindTransaction)
+
 	}
 
 	router.Run()
