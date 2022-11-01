@@ -26,7 +26,7 @@ func createServer() *gin.Engine {
 	if err != nil {
 		panic(err)
 	}
-	db := store.New(store.FileType, "./transactionstest.json")
+	db := store.New(store.FileType, "../transactionstest.json")
 	repo := transactions.NewRepository(db)
 	service := transactions.NewService(repo)
 	t := handler.NewTransaction(service)
@@ -71,39 +71,15 @@ func TestGetAllTransactions(t *testing.T) {
 func TestSaveTransaction(t *testing.T) {
 
 	//arrange
-	/*mockStorage := transactions.MockDB{
-		DataMock: []transactions.Transaction{
-			{
-				ID:       123,
-				Codigo:   "asd",
-				Moneda:   "USD",
-				Monto:    40.00,
-				Emisor:   "Juan",
-				Receptor: "Pedro",
-				Fecha:    "23/10/2022",
-			},
-			{
-				ID:       124,
-				Codigo:   "asda",
-				Moneda:   "USD",
-				Monto:    44.00,
-				Emisor:   "Pedro",
-				Receptor: "Juan",
-				Fecha:    "24/10/2022",
-			},
-		},
-	} */
+
 	var resp transactions.Transaction
 	r := createServer()
-	req, rr := createRequestTest(http.MethodPost, "/transactions/", `{
-		cod: "NEW", currency: "NEW", amount: 44.00, sender: "Pedro", receiver: "Juan", date: "24/10/2022",
-	}`)
+	req, rr := createRequestTest(http.MethodPost, "/transactions/", `{"cod": "NEW", "currency": "NEW", "amount": 44.00, "sender": "Pedro", "receiver": "Juan", "date": "24/10/2022"}`)
 	//act
 	r.ServeHTTP(rr, req)
-
+	json.Unmarshal(rr.Body.Bytes(), &resp)
 	//assert
-	err := json.Unmarshal(rr.Body.Bytes(), &resp)
-	assert.Nil(t, err)
+
 	assert.Equal(t, http.StatusCreated, rr.Code)
 
 }

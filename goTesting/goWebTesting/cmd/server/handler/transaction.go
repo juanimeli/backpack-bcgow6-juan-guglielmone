@@ -51,7 +51,8 @@ func (c *Transaction) Store() gin.HandlerFunc {
 
 		var r request
 		if err := ctx.ShouldBindJSON(&r); err != nil {
-			ctx.JSON(400, web.NewResponse(400, nil, fmt.Sprintf("field %s is required", err.Error())))
+			ctx.JSON(400, web.NewResponse(500, nil, fmt.Sprintf("field %s is required", err.Error())))
+			fmt.Printf("EL ERROR ES ESTE!!!!!:  %s \n", err.Error())
 			return
 		}
 

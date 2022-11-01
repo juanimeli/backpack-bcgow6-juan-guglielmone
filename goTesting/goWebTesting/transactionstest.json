@@ -88,5 +88,14 @@
     "sender": "string",
     "receiver": "string",
     "date": "string"
+  },
+  {
+    "ID": 11,
+    "cod": "NEW",
+    "currency": "NEW",
+    "amount": 44,
+    "sender": "Pedro",
+    "receiver": "Juan",
+    "date": "24/10/2022"
   }
 ]
