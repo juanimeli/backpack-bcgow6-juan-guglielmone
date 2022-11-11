@@ -1,0 +1,69 @@
+Escenario
+Una empresa proveedora de Internet necesita una base de datos para almacenar
+cada uno de sus clientes junto con el plan/pack que tiene contratado.
+Mediante un análisis previo se conoce que se tiene que almacenar la siguiente 
+información:
+ - De los clientes se debe registrar: dni, nombre, apellido, 
+ fecha de nacimiento, provincia, ciudad.
+ - En cuanto a los planes de internet: identificación del plan, 
+ velocidad ofrecida en megas, precio, descuento.
+ 
+ Ejercicio 1
+Luego del planteo de los requerimientos de la empresa, se solicita modelar 
+los mismos mediante un DER (Diagrama Entidad-Relación).
+
+ file: casoEmpresaDER.drawio
+
+ Ejercicio 2 
+Una vez modelada y planteada la base de datos, responder a 
+las siguientes preguntas:
+
+a. ¿Cuál es la primary key para la tabla de clientes? Justificar respuesta
+
+el dni, ya que es un numero unico que permite identificar a cada cliente.
+
+b. ¿Cuál es la primary key para la tabla de planes de internet?
+Justificar respuesta.
+
+para la tabla plan se utiliza el id_plan un numero unico para cada registro
+
+c. ¿Cómo serían las relaciones entre tablas? ¿En qué tabla debería haber 
+foreign key? ¿A qué campo de qué tabla hace referencia dicha foreign key? 
+Justificar respuesta.
+
+opte por una cardinalidad de muchos a muchos entre los clientes y los planes.
+Ya que considero que una persona puede tener varios planes de Internet y a su 
+vez cada plan puede ser contratado por muchas personas.
+Ya que es una cardinalidad de muchos a muchos se crea una tercer tabla
+"ClientePlan" que contara con un id unico de cada registro de esa tabla,
+luego cada registro contara con un dni del cliente que lo relaciona con un
+un id_plan y yun tercer campo "descuento" que indicara si ese cliente recibio
+algun tipo de descuento para el plan asignado en ese registro.
+
+En el caso de que cada cliente pueda tener solamente un plan se deberia
+agregar en la tabla de cliente un campo que incluya la clave foranea que
+relaciones el cliente con el plan que tiene contratado.
+
+
+ Ejercicio 3
+Una vez realizado el planteo del diagrama y de haber respondido estas preguntas, 
+utilizar PHPMyAdmin o MySQL Workbench para ejecutar lo siguiente:
+Se solicita crear una nueva base de datos llamada “empresa_internet”. 
+Incorporar 10 registros en la tabla de clientes y 5 en la tabla de planes de 
+internet.
+Realizar las asociaciones/relaciones correspondientes entre estos registros.
+
+ Ejercicio 4
+Plantear 10 consultas SQL que se podrían realizar a la base de datos. 
+Expresar las sentencias.
+
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.

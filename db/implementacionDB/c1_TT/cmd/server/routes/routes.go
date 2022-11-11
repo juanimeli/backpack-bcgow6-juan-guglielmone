@@ -39,6 +39,6 @@ func (r *router) buildSellerRoutes() {
 	r.rg.GET("/products", handler.GetAll())
 	r.rg.GET("/products/:id", handler.Get())
 	r.rg.POST("/products", handler.Create())
-	r.rg.DELETE("/products", handler.Delete())
+	r.rg.DELETE("/products/:id", handler.Delete())
 	r.rg.PATCH("/products/:id", handler.Update())
 }

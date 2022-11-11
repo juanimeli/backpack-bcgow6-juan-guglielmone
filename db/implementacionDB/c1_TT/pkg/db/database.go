@@ -20,10 +20,16 @@ func ConnectDatabase() (engine *gin.Engine, db *sql.DB) {
 		User:   os.Getenv("DBUSER"),
 		Passwd: os.Getenv("DBPASS"),
 		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
+		Addr:   "localhost:3306",
 		DBName: os.Getenv("DBNAME"),
 	}
 
-	db, err := sql.Open("mysql", configDB)
+	db, err = sql.Open("mysql", configDB.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	engine = gin.Default()
+	return engine, db
 
 }
