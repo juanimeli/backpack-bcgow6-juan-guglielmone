@@ -101,3 +101,19 @@ func (p *Product) Delete() gin.HandlerFunc {
 		ctx.JSON(http.StatusNoContent, gin.H{"delete": id})
 	}
 }
+
+func (p *Product) GetFullData() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		product, err := p.service.GetFullData(ctx, id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, product)
+	}
+}

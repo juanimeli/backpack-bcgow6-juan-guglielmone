@@ -13,6 +13,7 @@ type Service interface {
 	Update(ctx context.Context, product domain.Product, id int) (domain.Product, error)
 	GetAll(ctx context.Context) ([]domain.Product, error)
 	Delete(ctx context.Context, id int) error
+	GetFullData(ctx context.Context, id int) (domain.Product, error)
 }
 
 type service struct {
@@ -30,7 +31,7 @@ func (s *service) Store(ctx context.Context, p domain.Product) (domain.Product, 
 
 		return domain.Product{}, errors.New("error: product id alrready exists")
 	}
-	product_id, err := s.repo.Store(ctx, p.Name, p.Type, p.Count, p.Price)
+	product_id, err := s.repo.Store(ctx, p.Name, p.Type, p.Count, p.Price, p.Warehouse_id)
 	if err != nil {
 		return domain.Product{}, err
 	}
@@ -65,4 +66,12 @@ func (s *service) GetAll(ctx context.Context) ([]domain.Product, error) {
 }
 func (s *service) Delete(ctx context.Context, id int) error {
 	return s.repo.Delete(ctx, id)
+}
+
+func (s *service) GetFullData(ctx context.Context, id int) (domain.Product, error) {
+	product, err := s.repo.GetFullData(ctx, id)
+	if err != nil {
+		return domain.Product{}, err
+	}
+	return product, nil
 }
