@@ -26,6 +26,8 @@ const (
 	GET_PRODUCT_FULL_DATA = "SELECT p.id, p.name, p.type, p.count, p.price, w.name, w.adress " +
 		"FROM products p INNER JOIN warehouses w ON p.id_warehouse = w.id " +
 		"WHERE p.id = ?;"
+
+	GET_PRODUCT_TIMEOUT = "SELECT SLEEP(20) FROM DUAL WHERE id=?;"
 )
 
 type Respository interface {
@@ -36,6 +38,7 @@ type Respository interface {
 	Delete(ctx context.Context, id int) error
 	Exists(ctx context.Context, id int) bool
 	GetFullData(ctx context.Context, id int) (domain.Product, error)
+	GetOneWithContext(ctx context.Context, id int) (domain.Product, error)
 }
 
 type repository struct {
@@ -151,5 +154,20 @@ func (r *repository) GetFullData(ctx context.Context, id int) (domain.Product, e
 	if err != nil {
 		return domain.Product{}, err
 	}
+	return product, nil
+}
+
+func (r repository) GetOneWithContext(ctx context.Context, id int) (domain.Product, error) {
+
+	var product domain.Product
+
+	row := r.db.QueryRowContext(ctx, GET_PRODUCT, id) //ORIGINAL DE LA FUNCION
+	//row := r.db.QueryRowContext(ctx, GET_PRODUCT_TIMEOUT, id) // PARA PROBAR QUE SE PASE DE TIEMPO
+	err := row.Scan(&product.ID, &product.Name, &product.Type, &product.Count, &product.Price)
+	if err != nil {
+		log.Fatal(err)
+		return product, err
+	}
+
 	return product, nil
 }
