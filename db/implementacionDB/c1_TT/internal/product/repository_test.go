@@ -9,6 +9,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/db/implementaciondb/c1_tt/internal/domain"
+	"github.com/juanimeli/backpack-bcgow6-juan-guglielmone/db/implementaciondb/c1_tt/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -206,5 +207,33 @@ func TestGetAllFail(t *testing.T) {
 	assert.EqualError(t, err, ERRORFORZADO.Error())
 	assert.Empty(t, productsResult)
 	assert.NoError(t, mock.ExpectationsWereMet())
+
+}
+
+func Test_RepositorySave_txdb(t *testing.T) {
+	db := utils.InitTxDB()
+	defer db.Close()
+
+	repo := NewRepo(db)
+
+	ctx := context.TODO()
+
+	product_expected := domain.Product{
+		Name:         "Product Test",
+		Type:         "Testing",
+		Count:        5,
+		Price:        10.0,
+		Warehouse_id: 1,
+	}
+
+	id, err := repo.Store(ctx, product_expected.Name, product_expected.Type, product_expected.Count, product_expected.Price, product_expected.Warehouse_id)
+	assert.NoError(t, err)
+
+	product_expected.ID = int(id)
+	product, err := repo.GetOne(ctx, int(id))
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, product)
+	assert.Equal(t, product_expected.ID, product.ID)
 
 }
